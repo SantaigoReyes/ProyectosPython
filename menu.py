@@ -1,6 +1,7 @@
 import os 
 import shutil
-carpeta = r"C:\Users\santi\Downloads"
+#carpeta = input("Ingresa la ruta de la carpeta a organizar: ").strip()
+
 archivos = os.listdir(carpeta)
 print(archivos)
 

@@ -1,0 +1,17 @@
+Nombre,Edad,Ciudad,TipoArchivo
+Juan,30,Madrid,pdf
+Ana,25,Barcelona,docx
+Carlos,35,Sevilla,jpeg
+Carlos,35,Sevilla,pdf
+
+
+
+
+
+
+
+    with open('archivo.csv') as f:
+    reader = csv.DictReader(f)
+    for fila in reader:
+        print(fila['Nombre'], fila['Edad'], fila['Ciudad'], fila['TipoArchivo'])
+

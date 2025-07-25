@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from email.message import EmailMessage
 import ssl
 import smtplib
-
+from tkinter import Tk
+from tkinter import filedialog
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
@@ -30,12 +31,14 @@ def obtener_correos_destinatarios(archivo_csv):
 
 # Leer los correos de los destinatarios
 emails_destinatarios = obtener_correos_destinatarios("emails.csv")
-
-
-
+def seleccionar_archivos():
+    root = Tk()
+    root.withdraw()
+    archivos= filedialog.askopenfilenames(title="Seleccionar archivos para subir")
+    return archivos
+archivos_adjuntos = seleccionar_archivos()
 # Configurar el contexto de seguridad para enviar el correo
 context = ssl.create_default_context()
-
 # Conexión SMTP y envío de correos a todos los destinatarios
 with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
     smtp.login(email_sender, password)
@@ -46,8 +49,17 @@ with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
         em["From"] = email_sender
         em["To"] = email_reciver  # Asignar la dirección del destinatario
         em["Subject"] = subject
-        em.set_content(body)
-       
+        em.set_content(body) 
+
+        for ruta in archivos_adjuntos:
+            with open(ruta,"rb") as f:
+                datos = f.read()
+                nombre_archivo = os.path.basename(ruta)
+                tipo = "application"
+                subtipo ="octet-stream"
+
+
         smtp.sendmail(email_sender, email_reciver, em.as_string())  
-        print(f"Correo enviado a {email_reciver}")
-        
+        print(f"Correo enviado a {email_reciver} con {len(archivos_adjuntos)} archivos adjuntos")
+
+
